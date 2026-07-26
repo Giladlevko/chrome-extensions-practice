@@ -1,0 +1,88 @@
+*{
+    display: none !important;
+}
+
+html,
+body,
+*:has(:is(article, main, [role="main"], .rst-content)),
+:is(article, main, [role="main"], .rst-content),
+:is(article, main, [role="main"], .rst-content) * {
+    display: revert !important;
+}
+
+.wy-nav-side,
+[role="navigation"]:not(:has([rel="next"], [rel="prev"],hr)),
+footer{
+    display: none !important;
+}
+
+
+header:has(hr), 
+[role="navigation"]:has(hr),
+:is(.rst-content, .wy-nav-content) > hr,
+hr {
+    display: revert !important;
+    visibility: visible !important;
+    height: revert !important;
+    background-color:revert !important;
+    border: revert !important;
+    margin: revert !important;
+}
+
+
+
+/*first ":is" is parent and the second ":is" is the child, 
+basically look at this parent then look at this child in that parent
+*/
+:is(article, main, [role="main"], .rst-content) :is(.sd-row, [class*="grid"], [class*="row"]) {
+    display: grid !important;
+    flex-wrap: wrap !important;
+    gap: revert !important;
+    width: revert !important;
+    row-gap: 0.375rem !important;
+    column-gap: 0.375rem !important;
+}
+
+:is(article, main, [role="main"], .rst-content) :is(.sd-col, .sd-card) {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: revert !important; /* Forces cards to line up side by side */
+    width: revert !important;
+    height: revert !important;
+    margin: revert !important;
+}
+
+.wy-nav-content-wrap,
+.wy-nav-content {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.rst-footer-buttons {
+    display: block !important;
+    justify-content:revert !important;
+    width: 100% !important;
+    margin-top: revert !important;
+}
+
+:is([rel="next"], [rel="prev"]) {
+    display: inline-flex !important;
+    align-items: center !important; /* Vertically centers the text and arrow */
+    gap: 0.5rem !important;          /* Creates clean space between text and icon */
+    visibility: visible !important;
+}
+
+
+
+article,
+main,
+[role="main"],
+.rst-content{
+    margin: 2rem auto !important;
+    max-width: 900px !important;
+    padding: 0 2rem !important;
+}
+
