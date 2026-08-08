@@ -92,22 +92,41 @@ chrome.omnibox.onInputChanged.addListener(async(text,suggest)=>{
 });
 
 
-async function is_url_valif(url){
-    const controller = new AbortController();
-    let is_valid = false;
-    try{
-        const response = await fetch(url,{
-            method:'GET',signal:controller.signal
-        });
-        is_valid = response.ok;
-        return is_valid;
+
+chrome.webRequest.onResponseStarted.addListener((details)=>{
+    change_url_if_not_valid(details);
+},
+{
+    urls:["https://docs.godotengine.org/*"]
+}
+);
+
+
+
+function change_url_if_not_valid(details){
+    //only look at main tab frames
+    if(details.frameId !== 0){return;}
+
+    const url = new URL(details.url);
+    const match = url.pathname.match(/class_(.+)\.html$/);
+
+    if (match){
+        
+        //looks only at the (.+) part to get the actual typed class
+        //(.+) basically grabs everything between class_ and .html
+        const api = match[1];
+
+        if(details.statusCode === 404){
+            const fall_back = GODOT_FALL_BACK_URL+`${encodeURIComponent(api)}`;
+            chrome.tabs.update(details.tabId,{url:fall_back});
+        
+        }
+        else{
+        //only if it is a valid page we can save the api in the history
+        update_history(api);
+        }
     }
-    catch(err){
-        const message = 'API EITHER DOES NOT EXIST OR TYPED WRONGLY. GOING TO SITE SEARCH!';
-        console.log(message);
-        console.log("Fetch failed with error:", err);
-    }
-    return is_valid;
+
 }
     
 
@@ -123,23 +142,18 @@ chrome.omnibox.onInputEntered.addListener(async(input)=>{
     }
 
     const parts = input.trim().split(/\s+/);
-    const api = parts.slice(1).join(' ').trim().toLowerCase();
+    let api = parts.slice(1).join(' ').trim().toLowerCase();
+    api = api.replace(/\s+/g, '');
 
     let full_url = url+api+suffix;
-
-
-    if(api_state === state.GD_STATE){
-        const is_valid = await is_url_valif(full_url);
-        if(!is_valid){
-            const fall_back = GODOT_FALL_BACK_URL+`${encodeURIComponent(api)}`;
-            chrome.tabs.create({url:fall_back});
-            return;
-        }
-    }
     
     chrome.tabs.create({url:full_url});
     //save the latest input
-    update_history(api);
+    //if the state is chrome. for godot we wait and see if its a valid page first
+    if(api_state === state.CHROME_STATE){
+        update_history(api);
+    }
+    
 });
 
 async function update_history(input){

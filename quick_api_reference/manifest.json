@@ -10,7 +10,7 @@
     "service_worker": "scripts/service_worker.js",
     "type": "module"
     },
-    "permissions": ["storage","alarms"],
+    "permissions": ["storage","alarms","webRequest"],
     "host_permissions":[
         "https://docs.godotengine.org/*",
         "https://developer.chrome.com/*"
