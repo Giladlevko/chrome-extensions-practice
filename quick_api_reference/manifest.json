@@ -11,6 +11,10 @@
     "type": "module"
     },
     "permissions": ["storage","alarms"],
+    "host_permissions":[
+        "https://docs.godotengine.org/*",
+        "https://developer.chrome.com/*"
+    ],
     "minimum_chrome_version":"102",
     "omnibox":{
         "keyword":"api"
