@@ -91,9 +91,11 @@ chrome.omnibox.onInputChanged.addListener(async(text,suggest)=>{
     suggest(suggestions);
 });
 
-
+//an id that stores the tab id of the tab opened by the omnibox
+let url_from_omni = null;
 
 chrome.webRequest.onResponseStarted.addListener((details)=>{
+    if(details.url != url_from_omni){return;}
     change_url_if_not_valid(details);
 },
 {
@@ -122,8 +124,8 @@ function change_url_if_not_valid(details){
         
         }
         else{
-        //only if it is a valid page we can save the api in the history
-        update_history(api);
+            //only if it is a valid page we can save the api in the history
+            update_history(api);
         }
     }
 
@@ -146,8 +148,9 @@ chrome.omnibox.onInputEntered.addListener(async(input)=>{
     api = api.replace(/\s+/g, '');
 
     let full_url = url+api+suffix;
+    url_from_omni = full_url;
+   chrome.tabs.create({url:full_url});
     
-    chrome.tabs.create({url:full_url});
     //save the latest input
     //if the state is chrome. for godot we wait and see if its a valid page first
     if(api_state === state.CHROME_STATE){
