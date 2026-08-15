@@ -91,7 +91,7 @@ chrome.omnibox.onInputChanged.addListener(async(text,suggest)=>{
     suggest(suggestions);
 });
 
-//an id that stores the tab id of the tab opened by the omnibox
+//a url string that stores the url of the tab opened by the omnibox
 let url_from_omni = null;
 
 chrome.webRequest.onResponseStarted.addListener((details)=>{
