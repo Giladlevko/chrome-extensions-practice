@@ -1,3 +1,8 @@
+
+:root{
+    color-scheme: light dark;
+}
+
 body{
     width: 20rem;
 }
@@ -13,11 +18,11 @@ li{
 }
 
 li:nth-child(odd){
-    background: #80808030;
+    background: light-dark(#f0f0f0, #2a2a2a);;
 }
 
 li:nth-child(even){
-    background: #ffffff;
+    background: light-dark(#e0e0e0, #383838);
 }
 
 h3,

@@ -9,6 +9,9 @@
         "128": "images/icon-128.png"
     },
     "action":{
-        "default_action":"scripts/popup.html"
-    }
+        "default_popup":"scripts/popup.html"
+    },
+    "permissions":[
+        "tabGroups","tabs"
+    ]
 }
